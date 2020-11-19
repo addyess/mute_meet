@@ -13,10 +13,9 @@ laptop on the TV is possible
 
 ### Start Controller
 ```bash
-cd backend/
-virtualenv -m python3 venv
+cd backend
+make prepare
 . venv/bin/activate
-pip install -r requirements.txt
 python -m backend http &  # starts a simple http server, access it from your phone
 python -m backend ws &    # creates a websocket server the extension and controller accesses
 ```

@@ -8,3 +8,7 @@ build: $(EXTENSION)
 $(EXTENSION) : $(EXT_FILES)
 	mkdir -p build/
 	zip -r $(EXTENSION) $(EXT_SRC)
+
+.PHONY: backend-prepare
+backend-prepare:
+	$(MAKE) -C backend/ prepare
