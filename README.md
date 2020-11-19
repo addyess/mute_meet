@@ -22,6 +22,10 @@ python -m backend ws &    # creates a websocket server the extension and control
 ```
 
 ### Load Extension
+* Build the extension
+```bash
+make build
+```
 * Follow [Google's instructions](https://developer.chrome.com/extensions/getstarted) for loading the extension
 
 ### Future
