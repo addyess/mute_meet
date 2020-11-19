@@ -1,0 +1,34 @@
+{
+  "name": "Mute Meet",
+  "version": "1.0",
+  "description": "Mute a Meet session remotely",
+  "permissions": [
+    "activeTab", "declarativeContent", "storage"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/mic-16.png",
+      "32": "images/mic-32.png",
+      "48": "images/mic-48.png",
+      "128": "images/mic-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/mic-16.png",
+    "32": "images/mic-32.png",
+    "48": "images/mic-48.png",
+    "128": "images/mic-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["muter.js"]
+    }
+  ],
+  "manifest_version": 2
+}
