@@ -48,7 +48,7 @@ function handleMsg(event) {
 }
 
 (function(){
-    var _socket = new WebSocket('ws://' + location.host.split(":", 1) + ':8001');
+    var _socket = new WebSocket('wss://' + location.host.split(":", 1) + ':8001');
     _socket.onmessage = handleMsg;
     _socket.onopen = function(event) {
         let msg = { type: "controller" };
