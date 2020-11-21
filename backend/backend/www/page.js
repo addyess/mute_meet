@@ -1,6 +1,6 @@
 function addRow(id, uuid){
     let btnClass = (uuid == 'all') ? 'btn-outline-primary' : 'btn-outline-secondary';
-    let buttons = ['mic', 'camera', 'cc'].map(v =>
+    let buttons = ['mic', 'camera', 'cc', 'leave'].map(v =>
         '<button class="btn '+ btnClass +'" value="'+ uuid +'">'+ v +'</button>'
     );
     let row = (

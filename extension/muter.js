@@ -25,15 +25,23 @@ var socket = null;
             }
         }
 
-        class Muter extends UIElement {
-            constructor(device, key) {
-                let ctrlKey = '(ctrl + ' + key + ')';
-                let onLabel = '[aria-label="Turn on ' + device + ' ' + ctrlKey +'"]';
-                let offLabel = '[aria-label="Turn off '+ device + ' ' + ctrlKey +'"]';
-                super(onLabel, offLabel);
+        class AriaButton extends UIElement {
+            constructor(labelText) {
+                let selector = '[aria-label="' + labelText + '"]';
+                super(selector, selector);
             }
+
             getButton(label) {
                 return document.querySelector(label);
+            }
+        }
+
+        class Muter extends AriaButton {
+            constructor(device, key) {
+                let ctrlKey = key ? ' (ctrl + ' + key + ')' : "";
+                let onLabel = '[aria-label="Turn on ' + device + ctrlKey +'"]';
+                let offLabel = '[aria-label="Turn off '+ device + ctrlKey +'"]';
+                super(onLabel, offLabel);
             }
         }
 
@@ -50,6 +58,7 @@ var socket = null;
 
         var micButton = new Muter("microphone", "d");
         var camButton = new Muter("camera", "e");
+        var leaveButton = new AriaButton("Leave call");
         var ccButton = new CCMuter();
         eval(document.querySelector('#_ij').innerText);
         var email = window.IJ_values.filter(v => (typeof(v) == "string" && v.includes("@")));
@@ -61,6 +70,7 @@ var socket = null;
                 if (resp.toggle == "mic") { micButton.toggle(); }
                 else if (resp.toggle == "camera") { camButton.toggle(); }
                 else if (resp.toggle == "cc") { ccButton.toggle(); }
+                else if (resp.toggle == "leave") { leaveButton.toggle(); }
             };
             socket.onclose = function(event) {
                 let msg = {"logout": true};
