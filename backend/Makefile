@@ -8,3 +8,10 @@ prepare: venv/bin/activate requirements.txt
 		pip install -r requirements.txt; \
 	)
 
+.PHONY: run
+run:
+	( \
+		source venv/bin/activate; \
+		python3 -m backend; \
+	)
+

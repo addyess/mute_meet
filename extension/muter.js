@@ -26,9 +26,10 @@ var socket = null;
         }
 
         class AriaButton extends UIElement {
-            constructor(labelText) {
-                let selector = '[aria-label="' + labelText + '"]';
-                super(selector, selector);
+            constructor(onLabel, offLabel) {
+                let onSelect = '[aria-label="' + onLabel + '"]';
+                let offSelect = '[aria-label="' + offLabel + '"]';
+                super(onSelect, offSelect);
             }
 
             getButton(label) {
@@ -39,8 +40,8 @@ var socket = null;
         class Muter extends AriaButton {
             constructor(device, key) {
                 let ctrlKey = key ? ' (ctrl + ' + key + ')' : "";
-                let onLabel = '[aria-label="Turn on ' + device + ctrlKey +'"]';
-                let offLabel = '[aria-label="Turn off '+ device + ctrlKey +'"]';
+                let onLabel = 'Turn on ' + device + ctrlKey;
+                let offLabel = 'Turn off '+ device + ctrlKey;
                 super(onLabel, offLabel);
             }
         }
@@ -58,7 +59,7 @@ var socket = null;
 
         var micButton = new Muter("microphone", "d");
         var camButton = new Muter("camera", "e");
-        var leaveButton = new AriaButton("Leave call");
+        var leaveButton = new AriaButton("Leave call", "Leave call");
         var ccButton = new CCMuter();
         eval(document.querySelector('#_ij').innerText);
         var email = window.IJ_values.filter(v => (typeof(v) == "string" && v.includes("@")));
