@@ -1,7 +1,6 @@
 EXTENSION=build/mute_meet.zip
 EXT_SRC := extension
 EXT_FILES := $(wildcard $(EXT_SRC)/*)
-SHELL := /bin/bash
 
 .PHONY: build
 build: $(EXTENSION)

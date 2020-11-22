@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 venv/bin/activate:
 	virtualenv -m python3 venv
 
