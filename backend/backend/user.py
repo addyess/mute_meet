@@ -5,7 +5,7 @@ import logging
 from uuid import uuid4
 
 logger = logging.getLogger(__name__)
-Websocket = namedtuple('Websocket', 'uuid,email')
+Identity = namedtuple('Identity', 'uuid,email')
 
 
 class User:
@@ -32,29 +32,21 @@ class User:
         return user
 
     @classmethod
-    async def register(cls, websocket):
+    def register(cls, socket, data):
         """Await user to provide valid google id on new socket."""
-        def handle_registration(msg):
-            data = json.loads(msg)
-            user = cls.authenticate(data)
+        user = cls.authenticate(data)
 
-            if user and "type" in data:
-                purpose = data["type"]
-                email = data.get('user')
-                uuid = uuid4()
-                logger.info(f"{user} has arrived w/{purpose} @ {uuid}")
-                if purpose == "extension":
-                    user.extensions[websocket] = Websocket(uuid, email)
-                    return user, purpose, uuid
-                elif purpose == "controller":
-                    user.controllers[websocket] = Websocket(uuid, email)
-                    return user, purpose, uuid
-        try:
-            message = await websocket.recv()
-            return handle_registration(message)
-        except:
-            logger.exception("Registration Error")
-            raise
+        if user and "type" in data:
+            purpose = data["type"]
+            email = data.get('user')
+            uuid = uuid4()
+            logger.info(f"{user} has arrived w/{purpose} @ {uuid}")
+            if purpose == "extension":
+                user.extensions[socket.handle] = Identity(uuid, email)
+                return user, purpose, uuid
+            elif purpose == "controller":
+                user.controllers[socket.handle] = Identity(uuid, email)
+                return user, purpose, uuid
 
     def extension_state(self):
         return json.dumps(

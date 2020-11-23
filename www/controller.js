@@ -47,11 +47,21 @@ function handleMsg(event) {
     })
 }
 
-(function(){
-    var _socket = new WebSocket('wss://' + location.host + "/websocket");
-    _socket.onmessage = handleMsg;
-    _socket.onopen = function(event) {
-        let msg = { type: "controller" };
-        this.send(JSON.stringify(msg));
+$(document).ready(() => {
+    function createSocket(addresses){
+        head = addresses.shift();
+        var _socket = new WebSocket(head);
+        _socket.onerror=function(){
+            createSocket(addresses);
+        }
+        _socket.onmessage = handleMsg;
+        _socket.onopen = function(event) {
+            let msg = { type: "controller" };
+            this.send(JSON.stringify(msg));
+        }
     }
-})();
+    createSocket([
+        'wss://' + location.host + "/websocket",
+        'ws://localhost:8001'
+    ]);
+});

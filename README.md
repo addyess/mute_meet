@@ -11,13 +11,21 @@ How
 Run the 'backend' apps on a computer somewhere in your house -- even on that 
 laptop on the TV is possible
 
+### Configure Controller
+a `config.ini` file needs to be in the `backend` folder
+it should contain a section like this
+```ini
+[gapi]
+client_id = <yourclientid>.apps.googleusercontent.com
+controllers = <id1-of-authorized-controller>,<id1-of-authorized-controller>,
+```
+If this file is missing, no worries -- anyone with access to your sight
+will be a controller (obviously less secure)
+
 ### Start Controller
 ```bash
 cd backend
 make prepare
-. venv/bin/activate
-python -m backend http &  # starts a simple http server, access it from your phone
-python -m backend ws &    # creates a websocket server the extension and controller accesses
 ```
 
 ### Load Extension
