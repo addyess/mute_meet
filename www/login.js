@@ -13,7 +13,7 @@ function handleMsg(event) {
                     'theme': 'dark',
                     'onsuccess': (googleUser) => {
                         var id_token = googleUser.getAuthResponse().id_token;
-                        document.cookie = "gapi_token=" + id_token + "; SameSite=None";
+                        document.cookie = "gapi_token=" + id_token + "; SameSite=Lax";
                         window.location.href = "controller.html"
                     },
                     'onfailure': () => {}
@@ -23,7 +23,7 @@ function handleMsg(event) {
     } else {
         // No web application client_id specified -- go into controller,
         // without user access controls
-        document.cookie = "gapi_token=; SameSite=None";
+        document.cookie = "gapi_token=; SameSite=Lax";
         window.location.href = "controller.html"
     }
 }
