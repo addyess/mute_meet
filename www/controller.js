@@ -1,3 +1,16 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function encapsulate(msg) {
+    let token = getCookie("gapi_token");
+    if (token) { msg.token = token; }
+    return JSON.stringify(msg);
+}
+
+
 function addRow(id, uuid){
     let btnClass = (uuid == 'all') ? 'btn-outline-primary' : 'btn-outline-secondary';
     let buttons = ['mic', 'camera', 'cc', 'leave'].map(v =>
@@ -35,13 +48,13 @@ function handleMsg(event) {
         }
 
         uuid.forEach(function(uuid){
-            let msg = JSON.stringify({
+            let msg = encapsulate({
                 type: "controller",
                 action: {
                     device: device,
                     uuid: uuid,
                 }
-            });
+            })
             _socket.send(msg);
         });
     })
@@ -57,7 +70,7 @@ $(document).ready(() => {
         _socket.onmessage = handleMsg;
         _socket.onopen = function(event) {
             let msg = { type: "controller" };
-            this.send(JSON.stringify(msg));
+            this.send(encapsulate(msg));
         }
     }
     createSocket([

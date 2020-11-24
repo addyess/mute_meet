@@ -6,7 +6,8 @@ import json
 import logging
 import websockets
 
-from backend.user import User
+from backend.user import User, GoogleUser
+from backend.state import State
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,8 +35,10 @@ class MuteMeetSocket:
 
         if "get_client_id" in msg['type']:
             socket = CredsSocket(websocket, path)
-        elif msg['type'] in ["controller", "extension", ""]:
-            socket = UserSocket(websocket, path)
+        elif msg['type'] in ["controller"]:
+            socket = ControllerSocket(websocket, path)
+        elif msg['type'] in ["extension", ""]:
+            socket = ExtensionSocket(websocket, path)
         else:
             return
         await socket.runtime(msg)
@@ -57,11 +60,22 @@ class CredsSocket(MuteMeetSocket):
         await self.handle.send(msg)
 
 
-class UserSocket(MuteMeetSocket):
+class ExtensionSocket(MuteMeetSocket):
+    @property
+    def klass(self):
+        return User
+
     async def runtime(self, first_msg):
-        user, purpose, uuid = User.register(self, first_msg)
+        user = self.klass.authenticate(first_msg)
+        if not user:
+            return
+
+        state = State.register(self, user, first_msg)
+        if not state:
+            return
+
         try:
-            await user.notify_controllers()
+            await state.notify_controllers()
             async for message in self.handle:
                 data = json.loads(message)
                 logout = data.get("logout")
@@ -70,6 +84,17 @@ class UserSocket(MuteMeetSocket):
                     break
                 if action:
                     uuid, device = action.get('uuid'), action.get('device')
-                    await user.mute(uuid, device)
+                    await state.mute(uuid, device)
         finally:
-            await user.unregister(self.handle)
+            await state.unregister(self.handle)
+
+
+class ControllerSocket(ExtensionSocket):
+    @property
+    def klass(self):
+        try:
+            GoogleUser.client_id = self.config['gapi']['client_id']
+            GoogleUser.authorized_ids = self.config['gapi']['authorized_ids']
+            return GoogleUser
+        except ValueError:
+            return super().klass
