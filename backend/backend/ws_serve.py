@@ -96,5 +96,5 @@ class ControllerSocket(ExtensionSocket):
             GoogleUser.client_id = self.config['gapi']['client_id']
             GoogleUser.authorized_ids = self.config['gapi']['authorized_ids']
             return GoogleUser
-        except ValueError:
+        except KeyError:
             return super().klass
