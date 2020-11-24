@@ -13,14 +13,16 @@ laptop on the TV is possible
 
 ### Configure Controller
 a `config.ini` file needs to be in the `backend` folder
-it should contain a section like this
+it should contain a section like this.
 ```ini
 [gapi]
 client_id = <yourclientid>.apps.googleusercontent.com
-controllers = <id1-of-authorized-controller>,<id1-of-authorized-controller>,
+authorized_ids = <id1-of-authorized-controller>,<id1-of-authorized-controller>,
 ```
-If this file is missing, no worries -- anyone with access to your sight
-will be a controller (obviously less secure)
+If this file is missing, no worries -- anyone with access to your site
+will be a controller (obviously less secure).  But if you provide these on 
+your production site -- the app will use google to only allow certain 
+users to authenticate as the controller
 
 ### Start Controller
 ```bash
