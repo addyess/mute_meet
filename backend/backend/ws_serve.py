@@ -24,18 +24,25 @@ class MuteMeetSocket:
         asyncio.get_event_loop().run_forever()
 
     @staticmethod
-    async def create(websocket, path):
-        """Handle an opened socket."""
+    async def recv(websocket):
         try:
             message_str = await websocket.recv()
             msg = json.loads(message_str)
         except:
             logger.exception("Registration Error")
             raise
+        return msg
+
+    @staticmethod
+    async def create(websocket, path):
+        """Handle an opened socket."""
+        msg = await MuteMeetSocket.recv(websocket)
 
         if "get_client_id" in msg['type']:
             socket = CredsSocket(websocket, path)
-        elif msg['type'] in ["controller"]:
+            msg = await socket.client_id()
+
+        if msg['type'] in ["controller"]:
             socket = ControllerSocket(websocket, path)
         elif msg['type'] in ["extension", ""]:
             socket = ExtensionSocket(websocket, path)
@@ -52,12 +59,14 @@ class MuteMeetSocket:
 
 
 class CredsSocket(MuteMeetSocket):
-    async def runtime(self, first_msg):
+    async def client_id(self):
         try:
             msg = json.dumps({"client_id": self.config['gapi']['client_id']})
         except KeyError:
             msg = json.dumps({})
         await self.handle.send(msg)
+        msg = await MuteMeetSocket.recv(self.handle)
+        return msg
 
 
 class ExtensionSocket(MuteMeetSocket):
