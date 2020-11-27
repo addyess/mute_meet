@@ -1,0 +1,22 @@
+name: mute-meet-controller
+version: git
+summary: Mute Meet sessions controller
+description: |
+  Controlling Google Meet sessions remotely b/c youre too lazy (or cheap) to
+  add a keyboard to your TV's laptop.
+grade: stable
+base: core18
+confinement: strict
+
+apps:
+  mute-meet-controller:
+    command: /usr/bin/python3 -m backend
+    daemon: simple
+
+parts:
+  mute-meet-controller:
+    plugin: python
+    source: ./backend/
+    python-version: python3
+    requirements:
+      - requirements.txt
