@@ -23,13 +23,13 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      # Install snapcraft action
-      - name: Install Snapcraft
+      # Build with snapcraft
+      - name: Build with Snapcraft
         uses: snapcore/action-build@v1
         id: snapcraft
 
-      # Snapcraft build
-      - name: Build with Snapcraft
+      # Archive Snap
+      - name: Archive Snap
         uses: actions/upload-artifact@v2
         with:
           name: snap
