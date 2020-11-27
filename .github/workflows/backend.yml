@@ -28,9 +28,10 @@ jobs:
         uses: snapcore/action-build@v1
         id: snapcraft
 
-      # Archive Snap
-      - name: Archive Snap
-        uses: actions/upload-artifact@v2
+      # Publish Snap
+      - name: Publish Snap
+        uses: snapcore/action-publish@v1
         with:
-          name: snap
-          path: ${{ steps.snapcraft.outputs.snap }}
+          store_login: ${{ secrets.STORE_LOGIN }}
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge
