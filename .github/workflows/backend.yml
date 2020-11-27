@@ -26,7 +26,7 @@ jobs:
       # Build with snapcraft
       - name: Build with Snapcraft
         uses: snapcore/action-build@v1
-        id: snapcraft
+        id: build
 
       # Publish Snap
       - name: Publish Snap
