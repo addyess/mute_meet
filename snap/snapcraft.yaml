@@ -8,6 +8,10 @@ grade: stable
 base: core18
 confinement: strict
 
+architectures:
+  - build-on: amd64
+    run-on: all
+
 apps:
   mute-meet-controller:
     command: /usr/bin/python3 -m backend
