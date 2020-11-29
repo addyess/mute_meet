@@ -54,7 +54,7 @@ function addRow(id, uuid){
     $('#sessions tbody').append(row);
 }
 
-function populate_control_table(event) {
+function populate_control_table(event, _socket) {
     let resp = JSON.parse(event.data);
     let sessions = resp["meet-sessions"] || [];
 
@@ -120,7 +120,7 @@ function handleMsg(event) {
             _socket.send(encapsulate({}));
         }
     }
-    populate_control_table(event);
+    populate_control_table(event, _socket);
 }
 
 function googleInit(){
